@@ -1,4 +1,5 @@
-bash := if os_family() == 'windows' {
+
+sh := if os_family() == 'windows' {
     'C:\\PROGRA~1\Git\\usr\\bin\\bash.exe'
 } else {
     '/usr/bin/env bash'

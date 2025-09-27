@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/AppHost/">
+    <Project Path="AppHost/Hyprship.AppHost.csproj" />
+  </Folder>
+  <Folder Name="/ServiceDefaults/">
+    <Project Path="ServiceDefaults/Hyprship.ServiceDefaults.csproj" />
+  </Folder>
+</Solution>

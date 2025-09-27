@@ -1,3 +1,1 @@
-# Hyprx DotNet Libraries
-
-A monorepo for prototyping dotnet code and apps.
+# Hyprx DotNet Prototypes and alpha code

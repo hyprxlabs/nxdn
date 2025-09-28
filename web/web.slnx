@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/AspNetCore.Identity.EntityFrameworkCore/">
+    <Project Path="AspNetCore.Identity.EntityFrameworkCore/Hyprx.AspNetCore.Identity.EntityFrameworkCore.csproj" />
+  </Folder>
+  <Folder Name="/Extensions.Identity.Stores/">
+    <Project Path="Extensions.Identity.Stores/Hyprx.Extensions.Identity.Stores.csproj" />
+  </Folder>
+</Solution>

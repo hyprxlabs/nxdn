@@ -403,6 +403,7 @@ dotnet_diagnostic.SA1505.severity = none # braces are not required for single-li
 dotnet_diagnostic.SA1600.severity = none # elements are not required to be documented
 dotnet_diagnostic.SA1601.severity = none # partial elements are not required to be documented.
 dotnet_diagnostic.SA1602.severity = none # enumerations are not required to be documented.
+dotnet_diagnostic.SA1625.severity = none # documentation can be repeated.
 dotnet_diagnostic.SA1633.severity = none # file should have a copyright header
 
 

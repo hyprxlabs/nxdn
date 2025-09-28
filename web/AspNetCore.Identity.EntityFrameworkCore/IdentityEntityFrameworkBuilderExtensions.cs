@@ -57,6 +57,13 @@ public static class IdentityEntityFrameworkBuilderExtensions
             }
             else
             {
+                Console.WriteLine(identityContext.GenericTypeArguments[3].FullName);
+                Console.WriteLine(identityContext.GenericTypeArguments[4].FullName);
+                Console.WriteLine(identityContext.GenericTypeArguments[5].FullName);
+                Console.WriteLine(identityContext.GenericTypeArguments[6].FullName);
+                Console.WriteLine(identityContext.GenericTypeArguments[8].FullName);
+                Console.WriteLine(identityContext.GenericTypeArguments[7].FullName);
+
                 userStoreType = typeof(UserStore<,,,,,,,,,>).MakeGenericType(
                     userType,
                     roleType,
@@ -65,15 +72,15 @@ public static class IdentityEntityFrameworkBuilderExtensions
                     identityContext.GenericTypeArguments[3],
                     identityContext.GenericTypeArguments[4],
                     identityContext.GenericTypeArguments[5],
-                    identityContext.GenericTypeArguments[7],
                     identityContext.GenericTypeArguments[6],
-                    identityContext.GenericTypeArguments[8]);
+                    identityContext.GenericTypeArguments[8],
+                    identityContext.GenericTypeArguments[7]);
                 roleStoreType = typeof(RoleStore<,,,,>).MakeGenericType(
                     roleType,
                     contextType,
                     identityContext.GenericTypeArguments[2],
-                    identityContext.GenericTypeArguments[4],
-                    identityContext.GenericTypeArguments[6]);
+                    identityContext.GenericTypeArguments[5],
+                    identityContext.GenericTypeArguments[7]);
             }
 
             services.TryAddScoped(typeof(IUserStore<>).MakeGenericType(userType), userStoreType);

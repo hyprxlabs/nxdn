@@ -8,7 +8,7 @@ namespace Hyprx.AspNetCore.Identity;
 /// <summary>
 /// The default implementation of <see cref="IdentityRole{TKey}"/> which uses a string as the primary key.
 /// </summary>
-public class IdentityRole : IdentityRole<Guid>
+public class IdentityRole : IdentityRole<string>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="IdentityRole"/> class.
@@ -18,7 +18,7 @@ public class IdentityRole : IdentityRole<Guid>
     /// </remarks>
     public IdentityRole()
     {
-        this.Id = Guid.CreateVersion7();
+        this.Id = Guid.CreateVersion7().ToString();
     }
 
     /// <summary>
@@ -67,15 +67,15 @@ public class IdentityRole<TKey>
     /// <summary>
     /// Gets or sets the name for this role.
     /// </summary>
-    public virtual string? Name { get; set; }
+    public virtual string? FormattedName { get; set; }
 
     /// <summary>
     /// Gets or sets the normalized name for this role.
     /// </summary>
-    public virtual string? NormalizedName { get; set; }
+    public virtual string? Name { get; set; }
 
     /// <summary>
-    /// Gets or sets a random value that should change whenever a role is persisted to the store
+    /// Gets or sets a random value that should change whenever a role is persisted to the store.
     /// </summary>
     public virtual string? ConcurrencyStamp { get; set; } = Guid.NewGuid().ToString();
 

@@ -15,8 +15,8 @@ namespace Hyprx.AspNetCore.Identity.EntityFrameworkCore;
 /// Creates a new instance of a persistence store for roles.
 /// </summary>
 /// <typeparam name="TRole">The type of the class representing a role.</typeparam>
-public class RoleStore<TRole> : RoleStore<TRole, DbContext, Guid>
-    where TRole : IdentityRole<Guid>
+public class RoleStore<TRole> : RoleStore<TRole, DbContext, string>
+    where TRole : IdentityRole<string>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="RoleStore{TRole}"/> class.
@@ -34,8 +34,8 @@ public class RoleStore<TRole> : RoleStore<TRole, DbContext, Guid>
 /// </summary>
 /// <typeparam name="TRole">The type of the class representing a role.</typeparam>
 /// <typeparam name="TContext">The type of the data context class used to access the store.</typeparam>
-public class RoleStore<TRole, TContext> : RoleStore<TRole, TContext, Guid>
-    where TRole : IdentityRole<Guid>
+public class RoleStore<TRole, TContext> : RoleStore<TRole, TContext, string>
+    where TRole : IdentityRole<string>
     where TContext : DbContext
 {
     /// <summary>
@@ -314,7 +314,7 @@ public class RoleStore<TRole, TContext, TKey, TUserRole, TRoleClaim> :
     /// Set a role's normalized name as an asynchronous operation.
     /// </summary>
     /// <param name="role">The role whose normalized name should be set.</param>
-    /// <param name="normalizedName">The normalized name to set</param>
+    /// <param name="normalizedName">The normalized name to set.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
     public virtual Task SetNormalizedRoleNameAsync(TRole role, string? normalizedName, CancellationToken cancellationToken = default(CancellationToken))

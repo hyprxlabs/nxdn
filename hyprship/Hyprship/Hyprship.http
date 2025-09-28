@@ -1,0 +1,6 @@
+@Hyprship_HostAddress = http://localhost:5023
+
+GET {{Hyprship_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

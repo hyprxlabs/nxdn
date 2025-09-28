@@ -39,17 +39,17 @@ public class IdentityPasskeyData
     public virtual string[]? Transports { get; set; }
 
     /// <summary>
-    /// Gets or sets whether the passkey has a verified user.
+    /// Gets or sets a value indicating whether the passkey has a verified user.
     /// </summary>
     public virtual bool IsUserVerified { get; set; }
 
     /// <summary>
-    /// Gets or sets whether the passkey is eligible for backup.
+    /// Gets or sets a value indicating whether the passkey is eligible for backup.
     /// </summary>
     public virtual bool IsBackupEligible { get; set; }
 
     /// <summary>
-    /// Gets or sets whether the passkey is currently backed up.
+    /// Gets or sets a value indicating whether the passkey is currently backed up.
     /// </summary>
     public virtual bool IsBackedUp { get; set; }
 

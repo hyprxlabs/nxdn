@@ -17,7 +17,7 @@ namespace Hyprx.AspNetCore.Identity.EntityFrameworkCore;
 /// Base class for the Entity Framework database context used for identity.
 /// </summary>
 /// <typeparam name="TUser">The type of the user objects.</typeparam>
-public class IdentityUserContext<TUser> : IdentityUserContext<TUser, Guid>
+public class IdentityUserContext<TUser> : IdentityUserContext<TUser, string>
     where TUser : IdentityUser
 {
     /// <summary>
@@ -162,13 +162,13 @@ public abstract class IdentityUserContext<TUser, TKey, TUserClaim, TUserPassword
     /// </summary>
     protected virtual Version SchemaVersion => this.GetStoreOptions()?.SchemaVersion ?? IdentitySchemaVersions.Version1;
 
-    private StoreOptions? GetStoreOptions() => this.GetService<IDbContextOptions>()
+    protected StoreOptions? GetStoreOptions() => this.GetService<IDbContextOptions>()
                         .Extensions.OfType<CoreOptionsExtension>()
                         .FirstOrDefault()?.ApplicationServiceProvider
                         ?.GetService<IOptions<IdentityOptions>>()
                         ?.Value?.Stores;
 
-    private sealed class PersonalDataConverter : ValueConverter<string, string>
+    protected sealed class PersonalDataConverter : ValueConverter<string, string>
     {
         public PersonalDataConverter(IPersonalDataProtector protector)
             : base(s => protector.Protect(s), s => protector.Unprotect(s), default)

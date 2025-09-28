@@ -10,7 +10,7 @@ namespace Hyprx.AspNetCore.Identity;
 /// <summary>
 /// The default implementation of <see cref="IdentityUser{TKey}"/> which uses a string as a primary key.
 /// </summary>
-public class IdentityUser : IdentityUser<Guid>
+public class IdentityUser : IdentityUser<string>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="IdentityUser"/> class.
@@ -20,8 +20,8 @@ public class IdentityUser : IdentityUser<Guid>
     /// </remarks>
     public IdentityUser()
     {
-        this.Id = Guid.CreateVersion7();
-        this.SecurityStamp = Guid.NewGuid().ToString();
+        this.Id = Guid.CreateVersion7().ToString();
+        this.SecurityStamp = Guid.CreateVersion7().ToString();
     }
 
     /// <summary>

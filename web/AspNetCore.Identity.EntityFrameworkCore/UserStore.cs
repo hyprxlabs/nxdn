@@ -1,10 +1,7 @@
-
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Linq;
 using System.Security.Claims;
 
 using Microsoft.AspNetCore.Identity;
@@ -17,7 +14,7 @@ namespace Hyprx.AspNetCore.Identity.EntityFrameworkCore;
 /// Represents a new instance of a persistence store for users, using the default implementation
 /// of <see cref="IdentityUser{TKey}"/> with a string as a primary key.
 /// </summary>
-public class UserStore : UserStore<IdentityUser<Guid>>
+public class UserStore : UserStore<IdentityUser<string>>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="UserStore"/> class.
@@ -34,8 +31,8 @@ public class UserStore : UserStore<IdentityUser<Guid>>
 /// Creates a new instance of a persistence store for the specified user type.
 /// </summary>
 /// <typeparam name="TUser">The type representing a user.</typeparam>
-public class UserStore<TUser> : UserStore<TUser, IdentityRole, DbContext, Guid>
-    where TUser : IdentityUser<Guid>, new()
+public class UserStore<TUser> : UserStore<TUser, IdentityRole, DbContext, string>
+    where TUser : IdentityUser<string>, new()
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="UserStore{TUser}"/> class.
@@ -390,7 +387,7 @@ public class UserStore<TUser, TRole, TContext, [DynamicallyAccessedMembers(Dynam
     /// Returns a flag indicating if the specified user is a member of the give <paramref name="normalizedRoleName"/>.
     /// </summary>
     /// <param name="user">The user whose role membership should be checked.</param>
-    /// <param name="normalizedRoleName">The role to check membership of</param>
+    /// <param name="normalizedRoleName">The role to check membership of.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>A <see cref="Task{TResult}"/> containing a flag indicating if the specified user is a member of the given group. If the
     /// user is a member of the group the returned value with be true, otherwise it will be false.</returns>
@@ -960,7 +957,7 @@ public class UserStore<TUser, TRole, TContext, [DynamicallyAccessedMembers(Dynam
             return;
         }
 
-        this.dbContextSupportsPasskeys ??= Context.Model.FindEntityType(typeof(TUserPasskey)) is not null;
+        this.dbContextSupportsPasskeys ??= this.Context.Model.FindEntityType(typeof(TUserPasskey)) is not null;
         if (this.dbContextSupportsPasskeys == false)
         {
             throw new InvalidOperationException(

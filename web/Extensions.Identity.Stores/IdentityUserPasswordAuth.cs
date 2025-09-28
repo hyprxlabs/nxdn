@@ -3,12 +3,14 @@
 
 using System;
 
+using Microsoft.AspNetCore.Identity;
+
 namespace Hyprx.AspNetCore.Identity;
 
 /// <summary>
 /// The default implementation of <see cref="IdentityUserPasswordAuth{TKey}"/> which uses a string as a primary key.
 /// </summary>
-public class IdentityUserPasswordAuth : IdentityUserPasswordAuth<Guid>
+public class IdentityUserPasswordAuth : IdentityUserPasswordAuth<string>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="IdentityUserPasswordAuth"/> class.
@@ -18,7 +20,7 @@ public class IdentityUserPasswordAuth : IdentityUserPasswordAuth<Guid>
     /// </remarks>
     public IdentityUserPasswordAuth()
     {
-        this.UserId = Guid.CreateVersion7();
+        this.UserId = Guid.Empty.ToString();
         this.SecurityStamp = Guid.CreateVersion7().ToString();
     }
 
@@ -29,7 +31,7 @@ public class IdentityUserPasswordAuth : IdentityUserPasswordAuth<Guid>
     /// <remarks>
     /// The Id property is initialized to form a new GUID string value.
     /// </remarks>
-    public IdentityUserPasswordAuth(Guid userId)
+    public IdentityUserPasswordAuth(string userId)
         : this()
     {
         this.UserId = userId;

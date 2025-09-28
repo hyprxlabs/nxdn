@@ -8,7 +8,7 @@ namespace Hyprx.AspNetCore.Identity.EntityFrameworkCore;
 /// <summary>
 /// Base class for the Entity Framework database context used for identity.
 /// </summary>
-public class IdentityDbContext : IdentityDbContext<IdentityUser, IdentityRole, Guid>
+public class IdentityDbContext : IdentityDbContext<IdentityUser, IdentityRole, string>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="IdentityDbContext"/> class.
@@ -31,7 +31,7 @@ public class IdentityDbContext : IdentityDbContext<IdentityUser, IdentityRole, G
 /// Base class for the Entity Framework database context used for identity.
 /// </summary>
 /// <typeparam name="TUser">The type of the user objects.</typeparam>
-public class IdentityDbContext<TUser> : IdentityDbContext<TUser, IdentityRole, Guid>
+public class IdentityDbContext<TUser> : IdentityDbContext<TUser, IdentityRole, string>
     where TUser : IdentityUser
 {
     /// <summary>

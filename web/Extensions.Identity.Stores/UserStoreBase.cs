@@ -27,6 +27,7 @@ namespace Hyprx.AspNetCore.Identity;
 /// <typeparam name="TUserLoginProvider">The type representing a user external login.</typeparam>
 /// <typeparam name="TUserToken">The type representing a user token.</typeparam>
 public abstract class UserStoreBase<TUser, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TKey, TUserClaim, TUserPasswordAuth, TUserLoginProvider, TUserToken> :
+    IUserStore<TUser>,
     IUserLoginStore<TUser>,
     IUserClaimStore<TUser>,
     IUserPasswordStore<TUser>,

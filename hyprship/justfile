@@ -1,0 +1,4 @@
+
+migration-add NAME:
+    @dotnet ef migrations add "{{ NAME }}" --project ./Database.Sqlite --context SqliteDb
+    

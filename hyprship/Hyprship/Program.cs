@@ -22,7 +22,6 @@ app.MapStaticAssets();
 
 app.MapGet("/hello", () =>
 {
-
     return "hello";
 })
 .WithName("GetHello");

@@ -45,6 +45,8 @@ public class PasswordHasher : IPasswordHasher
         BinaryPrimitives.WriteUInt32BigEndian(result.AsSpan(8, 4), (uint)this.options.IterationCount);
         salt.AsSpan().CopyTo(result.AsSpan(12, salt.Length));
         key.AsSpan().CopyTo(result.AsSpan(12 + salt.Length, key.Length));
+        Array.Clear(salt, 0, salt.Length);
+        Array.Clear(key, 0, key.Length);
         return result;
     }
 
@@ -83,12 +85,13 @@ public class PasswordHasher : IPasswordHasher
         var storedKey = hashedPassword.AsSpan(12 + saltSize).ToArray();
 
         var computedKey = ComputeHash(providedPasswordBytes, salt, (int)iterationCount, storedKey.Length, hashAlgo);
+        Array.Clear(salt, 0, salt.Length);
         return CryptographicOperations.FixedTimeEquals(storedKey, computedKey);
     }
 
     private static byte[] ComputeHash(byte[] passwordBytes, byte[] salt, int iterationCount, int hashSize, Pbkdf2Hash hashAlgo)
     {
-        return System.Security.Cryptography.Rfc2898DeriveBytes.Pbkdf2(
+        return Rfc2898DeriveBytes.Pbkdf2(
             passwordBytes,
             salt,
             iterationCount,

@@ -13,6 +13,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore"  />
   </ItemGroup>
 
+  
+  <Target Name="CreatePublicDir" BeforeTargets="Build">
+
+  </Target>
+
   <ItemGroup>
       <Content Include="public\**\*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>

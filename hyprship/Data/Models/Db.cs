@@ -23,7 +23,7 @@ public class Db : IdentityDbContext<User, Role, Guid>
         optionsBuilder.UseSnakeCaseNamingConvention();
         optionsBuilder.UseAsyncSeeding(async (ctx, _, ct) =>
         {
-            var adminRole = ctx.Set<Role>().FirstOrDefault(r => r.Name == "admin");
+            var adminRole = await ctx.Set<Role>().FirstOrDefaultAsync(r => r.Name == "admin", ct);
             if (adminRole is null)
             {
                 adminRole = new Role
@@ -36,7 +36,7 @@ public class Db : IdentityDbContext<User, Role, Guid>
                 ctx.Set<Role>().Add(adminRole);
             }
 
-            var rootServiceAccount = ctx.Set<User>().FirstOrDefault(u => u.UserName == "hyprship_root");
+            var rootServiceAccount = await ctx.Set<User>().FirstOrDefaultAsync(u => u.UserName == "hyprship_root", ct);
             if (rootServiceAccount is null)
             {
                 var rootEmail = Environment.GetEnvironmentVariable("HYPRSHIP_ROOT_EMAIL");

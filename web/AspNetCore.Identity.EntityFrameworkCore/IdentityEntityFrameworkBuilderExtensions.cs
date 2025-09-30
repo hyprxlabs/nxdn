@@ -57,13 +57,6 @@ public static class IdentityEntityFrameworkBuilderExtensions
             }
             else
             {
-                Console.WriteLine(identityContext.GenericTypeArguments[3].FullName);
-                Console.WriteLine(identityContext.GenericTypeArguments[4].FullName);
-                Console.WriteLine(identityContext.GenericTypeArguments[5].FullName);
-                Console.WriteLine(identityContext.GenericTypeArguments[6].FullName);
-                Console.WriteLine(identityContext.GenericTypeArguments[8].FullName);
-                Console.WriteLine(identityContext.GenericTypeArguments[7].FullName);
-
                 userStoreType = typeof(UserStore<,,,,,,,,,>).MakeGenericType(
                     userType,
                     roleType,

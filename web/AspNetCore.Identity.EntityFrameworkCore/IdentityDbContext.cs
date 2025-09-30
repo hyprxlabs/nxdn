@@ -31,7 +31,7 @@ public class IdentityDbContext : IdentityDbContext<IdentityUser, IdentityRole, s
 /// Base class for the Entity Framework database context used for identity.
 /// </summary>
 /// <typeparam name="TUser">The type of the user objects.</typeparam>
-public class IdentityDbContext<TUser> : IdentityDbContext<TUser, IdentityRole, string>
+public class IdentityDbContext<TUser> : IdentityDbContext<TUser, IdentityRole<string>, string>
     where TUser : IdentityUser
 {
     /// <summary>

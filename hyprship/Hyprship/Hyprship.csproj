@@ -8,8 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi"  />
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy"  />
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" />
     <PackageReference Include="Swashbuckle.AspNetCore"  />
   </ItemGroup>
 
@@ -20,6 +22,11 @@
 
   <ItemGroup>
       <Content Include="public\**\*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Data.Sqlite\Hyprship.Data.Sqlite.csproj" />
+    <ProjectReference Include="..\Data\Hyprship.Data.Models.csproj" />
   </ItemGroup>
 
 </Project>

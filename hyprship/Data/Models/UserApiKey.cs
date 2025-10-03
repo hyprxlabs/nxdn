@@ -1,32 +1,56 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
+using Hyprship.Database.Models;
+
+using Hyprx.AspNetCore.Identity;
+
 namespace Hyprship.Data.Models;
 
 public class UserApiKey : IdentityUserApiKey<Guid>
 {
+    private HashSet<UserApiKeyRole> userApiKeyRoles = new();
+
     public UserApiKey()
     {
         this.Id = Guid.CreateVersion7();
+        this.UserApiKeyRoles = new();
         this.CreatedAt = DateTime.UtcNow;
     }
-}
 
-public class IdentityUserApiKey<TKey>
-where TKey : IEquatable<TKey>
-{
-    public TKey Id { get; set; } = default!;
+    public UserApiKey(Guid userId)
+        : this()
+    {
+        this.Id = Guid.CreateVersion7();
+        this.UserApiKeyRoles = new();
+        this.UserId = userId;
+        this.CreatedAt = DateTime.UtcNow;
+    }
 
-    public TKey UserId { get; set; } = default!;
-
-    public virtual User User { get; set; } = null!;
-
-    public virtual HashSet<UserApiKeyRole> Roles { get; set; } = new();
-
-    public string Name { get; set; } = null!;
-
-    public string KeyDigest { get; set; } = null!;
-
-    public DateTime? ExpiresAt { get; set; }
+    public virtual User? User { get; set; } = null;
 
     public DateTime CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
+
+    public virtual HashSet<UserApiKeyRole> UserApiKeyRoles
+    {
+        get => this.userApiKeyRoles;
+        set 
+            {
+                this.userApiKeyRoles = value;
+                this.Roles = new Many<UserApiKey, Role, UserApiKeyRole>(
+                    this,
+                    this.UserApiKeyRoles,
+                    (o) => o.Role,
+                    (key, role) => new(key.Id, role.Id)
+                    {
+                        Role = role,
+                        UserApiKey = this,
+                    });
+        }
+    }
+
+    [NotMapped]
+    public Many<UserApiKey, Role, UserApiKeyRole> Roles { get; private set; }
 }
+

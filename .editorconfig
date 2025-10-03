@@ -185,6 +185,9 @@ csharp_preserve_single_line_statements = true
 # IDE0320: Make anonymous function static
 csharp_prefer_static_anonymous_function = false
 
+# SA1649: File name should match first type name
+dotnet_diagnostic.SA1649.severity = none
+
 [*.{cs,vb}]
 
 # Naming rules
@@ -403,6 +406,7 @@ dotnet_diagnostic.SA1505.severity = none # braces are not required for single-li
 dotnet_diagnostic.SA1600.severity = none # elements are not required to be documented
 dotnet_diagnostic.SA1601.severity = none # partial elements are not required to be documented.
 dotnet_diagnostic.SA1602.severity = none # enumerations are not required to be documented.
+dotnet_diagnostic.SA1649.severity = none # file names do not need to match type names.
 dotnet_diagnostic.SA1625.severity = none # documentation can be repeated.
 dotnet_diagnostic.SA1633.severity = none # file should have a copyright header
 

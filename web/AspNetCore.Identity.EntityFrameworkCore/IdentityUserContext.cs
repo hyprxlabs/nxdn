@@ -222,14 +222,14 @@ public abstract class IdentityUserContext<TUser, TKey, TUserClaim, TUserPassword
         builder.Entity<TUser>(b =>
         {
             b.HasKey(u => u.Id);
-            b.HasIndex(u => u.UserName).HasDatabaseName("UserNameIndex").IsUnique();
-            b.HasIndex(u => u.Email).HasDatabaseName("EmailIndex");
+            b.HasIndex(u => u.UpcaseUserName).HasDatabaseName("IX_IdentityUsers_UpcaseUserName").IsUnique();
+            b.HasIndex(u => u.UpcaseEmail).HasDatabaseName("IX_IdentityUsers_UpcaseEmailIndex");
             b.ToTable("IdentityUsers");
             b.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
 
-            b.Property(u => u.FormattedUserName).HasMaxLength(256);
             b.Property(u => u.UserName).HasMaxLength(256);
-            b.Property(u => u.FormattedEmail).HasMaxLength(256);
+            b.Property(u => u.UpcaseUserName).HasMaxLength(256);
+            b.Property(u => u.UpcaseEmail).HasMaxLength(256);
             b.Property(u => u.Email).HasMaxLength(256);
 
             if (encryptPersonalData)
@@ -359,14 +359,14 @@ public abstract class IdentityUserContext<TUser, TKey, TUserClaim, TUserPassword
         builder.Entity<TUser>(b =>
         {
             b.HasKey(u => u.Id);
-            b.HasIndex(u => u.UserName).HasDatabaseName("UserNameIndex").IsUnique();
-            b.HasIndex(u => u.Email).HasDatabaseName("EmailIndex");
+            b.HasIndex(u => u.UpcaseUserName).HasDatabaseName("IX_IdentityUsers_UpcaseUserName").IsUnique();
+            b.HasIndex(u => u.UpcaseEmail).HasDatabaseName("IX_IdentityUsers_UpcaseEmail");
             b.ToTable("IdentityUsers");
             b.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
 
-            b.Property(u => u.FormattedUserName).HasMaxLength(256);
+            b.Property(u => u.UpcaseUserName).HasMaxLength(256);
             b.Property(u => u.UserName).HasMaxLength(256);
-            b.Property(u => u.FormattedEmail).HasMaxLength(256);
+            b.Property(u => u.UpcaseEmail).HasMaxLength(256);
             b.Property(u => u.Email).HasMaxLength(256);
 
             if (encryptPersonalData)
@@ -481,14 +481,14 @@ public abstract class IdentityUserContext<TUser, TKey, TUserClaim, TUserPassword
         builder.Entity<TUser>(b =>
         {
             b.HasKey(u => u.Id);
-            b.HasIndex(u => u.UserName).HasDatabaseName("UserNameIndex").IsUnique();
-            b.HasIndex(u => u.Email).HasDatabaseName("EmailIndex");
+            b.HasIndex(u => u.UserName).HasDatabaseName("IX_IdentityUser_UpcaseUserName").IsUnique();
+            b.HasIndex(u => u.Email).HasDatabaseName("IX_IdentityUser_UpcaseEmail");
             b.ToTable("IdentityUsers");
             b.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
 
-            b.Property(u => u.FormattedUserName).HasMaxLength(256);
+            b.Property(u => u.UpcaseUserName).HasMaxLength(256);
             b.Property(u => u.UserName).HasMaxLength(256);
-            b.Property(u => u.FormattedEmail).HasMaxLength(256);
+            b.Property(u => u.UpcaseEmail).HasMaxLength(256);
             b.Property(u => u.Email).HasMaxLength(256);
 
             if (encryptPersonalData)

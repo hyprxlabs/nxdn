@@ -2,15 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>$(Fx)</TargetFramework>
+    <RootNamespace>Hyprship.Database</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
     <PackageReference Include="EFCore.NamingConventions" />
+    
   </ItemGroup>
 
   <ItemGroup>
       <ProjectReference Include="../../web/AspNetCore.Identity.EntityFrameworkCore/*.csproj" />
+      <ProjectReference Include="..\..\web\Extensions.Identity.Core\Hyprx.Extensions.Identity.Core.csproj" />
   </ItemGroup>
 
 </Project>

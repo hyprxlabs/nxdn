@@ -1,4 +1,9 @@
 
 migration-add NAME:
-    @dotnet ef migrations add "{{ NAME }}" --project ./Database.Sqlite --context SqliteDb
+    @dotnet ef migrations add "{{ NAME }}" --project ./Data.Sqlite --context SqliteDb
+    @dotnet ef migrations add "{{ NAME }}" --project ./Data.Mssql --context MssqlDb
+    @dotnet ef migrations add "{{ NAME }}" --project ./Data.Mysql --context MysqlDb
+    @dotnet ef migrations add "{{ NAME }}" --project ./Data.Postgres --context PostgresDb
     
+
+

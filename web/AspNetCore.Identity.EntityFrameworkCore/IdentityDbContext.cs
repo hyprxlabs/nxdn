@@ -201,7 +201,7 @@ public abstract class IdentityDbContext<TUser, TRole, TKey, TUserClaim, TUserPas
             b.ToTable("IdentityRoles");
             b.Property(r => r.ConcurrencyStamp).IsConcurrencyToken();
 
-            b.Property(u => u.FormattedName).HasMaxLength(256);
+            b.Property(u => u.UpcaseName).HasMaxLength(256);
             b.Property(u => u.Name).HasMaxLength(256);
 
             b.HasMany<TUserRole>().WithOne().HasForeignKey(ur => ur.RoleId).IsRequired();
@@ -244,7 +244,7 @@ public abstract class IdentityDbContext<TUser, TRole, TKey, TUserClaim, TUserPas
             b.ToTable("IdentityRoles");
             b.Property(r => r.ConcurrencyStamp).IsConcurrencyToken();
 
-            b.Property(u => u.FormattedName).HasMaxLength(256);
+            b.Property(u => u.UpcaseName).HasMaxLength(256);
             b.Property(u => u.Name).HasMaxLength(256);
 
             b.HasMany<TUserRole>().WithOne().HasForeignKey(ur => ur.RoleId).IsRequired();
@@ -285,7 +285,7 @@ public abstract class IdentityDbContext<TUser, TRole, TKey, TUserClaim, TUserPas
             b.ToTable("IdentityRoles");
             b.Property(r => r.ConcurrencyStamp).IsConcurrencyToken();
 
-            b.Property(u => u.FormattedName).HasMaxLength(256);
+            b.Property(u => u.UpcaseName).HasMaxLength(256);
             b.Property(u => u.Name).HasMaxLength(256);
 
             b.HasMany<TUserRole>().WithOne().HasForeignKey(ur => ur.RoleId).IsRequired();

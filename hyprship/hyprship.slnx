@@ -1,18 +1,14 @@
 <Solution>
-  <Folder Name="/AppHost/">
-    <Project Path="AppHost/Hyprship.AppHost.csproj" />
-  </Folder>
-  <Folder Name="/Data.Sqlite/">
-    <Project Path="Data.Sqlite/Hyprship.Data.Sqlite.csproj" />
-  </Folder>
-  <Folder Name="/Data/">
-    <Project Path="Data/Hyprship.Database.csproj" />
-  </Folder>
-  <Folder Name="/ServiceDefaults/">
-    <Project Path="ServiceDefaults/Hyprship.ServiceDefaults.csproj" />
-  </Folder>
   <Project Path="../web/AspNetCore.Identity.EntityFrameworkCore/Hyprx.AspNetCore.Identity.EntityFrameworkCore.csproj" />
   <Project Path="../web/Extensions.Identity.Core/Hyprx.Extensions.Identity.Core.csproj" />
-  <Project Path="../web/Extensions.Identity.Stores/Hyprx.Extensions.Identity.Stores.csproj" />
+  <Project Path="AppHost/Hyprship.AppHost.csproj" />
+  <Project Path="Data.Mssql\Hyprship.Data.Mssql.csproj" />
+  <Project Path="Data.Mysql\Hyprship.Data.Mysql.csproj" />
+  <Project Path="Data.Postgres\Hyprship.Data.Postgres.csproj" />
+  <Project Path="Data.Sqlite/Hyprship.Data.Sqlite.csproj" />
+  <Project Path="Data.Stores/Hyprship.Data.Stores.csproj" />
+  <Project Path="Data\Hyprship.Data.Models.csproj" />
   <Project Path="Hyprship/Hyprship.csproj" />
+  <Project Path="ServiceDefaults/Hyprship.ServiceDefaults.csproj" />
+  <Project Path="Services/Hyprship.Services.csproj" />
 </Solution>

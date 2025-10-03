@@ -2,35 +2,23 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Hyprship.Data.Sqlite;
 
 public class SqliteDb : Db
 {
-    public SqliteDb(DbContextOptions<SqliteDb> options)
+    public SqliteDb(DbContextOptions options)
         : base(options)
     {
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseSqlite("Data Source=hyprship.db");
-            optionsBuilder.UseSnakeCaseNamingConvention();
-        }
+        if (optionsBuilder.IsConfigured)
+            return;
 
-        base.OnConfiguring(optionsBuilder);
+        SqliteDbOptionsBuilder.ApplyDefaults(optionsBuilder);
     }
 }
 
-public class SqliteDbFactory : IDesignTimeDbContextFactory<SqliteDb>
-{
-    public SqliteDb CreateDbContext(string[] args)
-    {
-        var optionsBuilder = new DbContextOptionsBuilder<SqliteDb>();
-        optionsBuilder.UseSqlite("Data Source=hyprship.db");
-        optionsBuilder.UseSnakeCaseNamingConvention();
-        return new SqliteDb(optionsBuilder.Options);
-    }
-}

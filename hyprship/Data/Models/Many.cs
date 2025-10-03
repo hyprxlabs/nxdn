@@ -4,15 +4,15 @@ namespace Hyprship.Data.Models;
 
 public class Many<TOwner, TRelated, TValue> : IReadOnlyCollection<TRelated>
 {
-    private TOwner owner;
+    private readonly TOwner owner;
 
-    private Func<TValue, TRelated> getter;
+    private readonly Func<TValue, TRelated> getter;
 
-    private ICollection<TValue> values;
+    private readonly ICollection<TValue> values;
 
-    private Func<TOwner, TRelated, TValue> factory;
+    private readonly Func<TOwner, TRelated, TValue> factory;
 
-    private List<TValue> related = new();
+    private readonly List<TValue> related = new();
 
     public Many(
         TOwner owner,

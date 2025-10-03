@@ -21,4 +21,3 @@ public class SqliteDb : Db
         SqliteDbOptionsBuilder.ApplyDefaults(optionsBuilder);
     }
 }
-

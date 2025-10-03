@@ -19,7 +19,7 @@ public class UserPasskey : IdentityUserPasskey<Guid>
         this.CredentialId = credentialId;
     }
 
-    public virtual User User { get; set; } = null!;
+    public virtual User? User { get; set; } = null;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

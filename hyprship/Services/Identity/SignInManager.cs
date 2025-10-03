@@ -10,7 +10,7 @@ namespace Hypership.Services.Identity;
 
 public class SignInManager : Microsoft.AspNetCore.Identity.SignInManager<User>
 {
-    public SignInManager(UserManager<User> userManager, IHttpContextAccessor contextAccessor, IUserClaimsPrincipalFactory<User> claimsFactory, IOptions<IdentityOptions> optionsAccessor, ILogger<SignInManager<User>> logger, IAuthenticationSchemeProvider schemes) 
+    public SignInManager(UserManager<User> userManager, IHttpContextAccessor contextAccessor, IUserClaimsPrincipalFactory<User> claimsFactory, IOptions<IdentityOptions> optionsAccessor, ILogger<SignInManager<User>> logger, IAuthenticationSchemeProvider schemes)
         : base(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemes)
     {
     }

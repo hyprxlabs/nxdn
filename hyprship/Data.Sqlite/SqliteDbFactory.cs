@@ -17,6 +17,7 @@ public class SqliteDbFactory : IDesignTimeDbContextFactory<SqliteDb>
             }
         }
 
+        Console.WriteLine("Using connection string: " + connectionString);
         var optionsBuilder = new SqliteDbOptionsBuilder(connectionString);
         return new SqliteDb(optionsBuilder.Options);
     }

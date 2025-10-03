@@ -18,7 +18,6 @@ public class ApiResult
     public Error? Error { get; set; }
 }
 
-
 public class ApiResult<TValue> : ApiResult
 {
     public TValue? Value { get; set; }
@@ -99,7 +98,6 @@ public class ApiResult<T, TValue> : ApiResult<TValue>
     }
 }
 
-
 /*
 public sealed class Failure<TValue> : IResult, IEndpointMetadataProvider, IStatusCodeHttpResult, IValueHttpResult,
     IValueHttpResult<TValue>
@@ -167,7 +165,7 @@ public sealed class Failure<TValue> : IResult, IEndpointMetadataProvider, IStatu
                 return Task.CompletedTask;
             }
 
-           jsonSerializerOptions ??= ResolveJsonOptions(httpContext).SerializerOptions; 
+           jsonSerializerOptions ??= ResolveJsonOptions(httpContext).SerializerOptions;
             var jsonTypeInfo = (JsonTypeInfo<TValue>)jsonSerializerOptions.GetTypeInfo(typeof(TValue));
 
             Type? runtimeType = value.GetType();

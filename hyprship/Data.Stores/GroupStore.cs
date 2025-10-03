@@ -13,7 +13,6 @@ public class GroupStore
 
     protected Db Db { get; init; }
 
-
     public async Task<List<string>> GroupsForUserAsync(User user, CancellationToken token = default)
     {
         if (user.Groups.Count > 0)

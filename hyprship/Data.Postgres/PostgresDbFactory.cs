@@ -8,7 +8,7 @@ public class PostgresDbDbFactory : IDesignTimeDbContextFactory<PostgresDb>
     public PostgresDb CreateDbContext(string[] args)
     {
         string? connectionString = null;
-        for(var i = 0; i < args.Length; i++)
+        for (var i = 0; i < args.Length; i++)
         {
             if (args[i] == "--connection-string" && i + 1 < args.Length)
             {

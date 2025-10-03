@@ -7,7 +7,7 @@ public class UserLoginProvider : IdentityUserLoginProvider<Guid>
     public UserLoginProvider()
     {
     }
-    
+
     public UserLoginProvider(Guid userId)
     {
         this.UserId = userId;
@@ -20,9 +20,9 @@ public class UserLoginProvider : IdentityUserLoginProvider<Guid>
         this.ProviderKey = providerKey;
     }
 
-    public virtual User User { get; set; } = null!;
-
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public DateTime? UpdatedAt { get; set; }
+
+    public virtual User User { get; set; } = null!;
 }

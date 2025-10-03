@@ -10,6 +10,8 @@ public partial class Db
 {
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        Console.WriteLine("OnModelCreating");
+
         // Differences from Version 2:
         // - Add a passkey entity
         var storeOptions = this.GetStoreOptions();
@@ -51,15 +53,18 @@ public partial class Db
                 }
             }
 
-            b.HasMany<IdentityUserClaim<Guid>>().WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
-            b.HasMany<IdentityUserLoginProvider<Guid>>().WithOne().HasForeignKey(ul => ul.UserId).IsRequired();
-            b.HasMany<IdentityUserToken<Guid>>().WithOne().HasForeignKey(ut => ut.UserId).IsRequired();
-            b.HasOne<IdentityUserPasswordAuth<Guid>>().WithOne().HasForeignKey<IdentityUserPasswordAuth<Guid>>(ua => ua.UserId).IsRequired();
-            b.HasMany<IdentityUserPasskey<Guid>>().WithOne().HasForeignKey(up => up.UserId).IsRequired();
-            b.HasMany<UserApiKey>(u => u.ApiKeys).WithOne(u => u.User).IsRequired(); ;
+            b.HasMany<UserRole>(u => u.UserRoles).WithOne(ur => ur.User).HasForeignKey(ur => ur.UserId).IsRequired();
+            b.HasMany<UserClaim>(o => o.Claims).WithOne(o => o.User).HasForeignKey(uc => uc.UserId).IsRequired();
+            b.HasMany<UserLoginProvider>(o => o.LoginProviders).WithOne(lp => lp.User).HasForeignKey(ul => ul.UserId).IsRequired();
+            b.HasMany<UserToken>(u => u.Tokens).WithOne(o => o.User).HasForeignKey(ut => ut.UserId).IsRequired();
+            b.HasOne<UserPasswordAuth>(u => u.PasswordAuth).WithOne(o => o.User).IsRequired();
+            b.HasMany<UserPasskey>(u => u.Passkeys).WithOne(p => p.User).HasForeignKey(up => up.UserId).IsRequired();
+            b.HasMany<UserApiKey>(u => u.ApiKeys).WithOne(u => u.User).IsRequired();
         });
 
-        builder.Entity<IdentityUserPasswordAuth<Guid>>(b =>
+        Console.WriteLine("OnModelCreating2");
+
+        builder.Entity<UserPasswordAuth>(b =>
         {
             b.HasKey(ua => ua.UserId);
             b.Property(u => u.PhoneNumber).HasMaxLength(256);
@@ -69,7 +74,7 @@ public partial class Db
             if (encryptPersonalData)
             {
                 converter = new PersonalDataConverter(this.GetService<IPersonalDataProtector>());
-                var personalDataProps = typeof(IdentityUserPasswordAuth).GetProperties().Where(
+                var personalDataProps = typeof(UserPasswordAuth).GetProperties().Where(
                                 prop => Attribute.IsDefined(prop, typeof(ProtectedPersonalDataAttribute)));
                 foreach (var p in personalDataProps)
                 {
@@ -83,13 +88,17 @@ public partial class Db
             }
         });
 
-        builder.Entity<IdentityUserClaim<Guid>>(b =>
+        Console.WriteLine("OnModelCreating3");
+
+        builder.Entity<UserClaim>(b =>
         {
             b.HasKey(uc => uc.Id);
             b.ToTable("user_claims");
         });
 
-        builder.Entity<IdentityUserLoginProvider<Guid>>(b =>
+        Console.WriteLine("OnModelCreating4");
+
+        builder.Entity<UserLoginProvider>(b =>
         {
             b.HasKey(l => new { l.LoginProvider, l.ProviderKey });
 
@@ -102,7 +111,8 @@ public partial class Db
             b.ToTable("user_login_providers");
         });
 
-        builder.Entity<IdentityUserToken<Guid>>(b =>
+        Console.WriteLine("OnModelCreating5");
+        builder.Entity<UserToken>(b =>
         {
             b.HasKey(t => new { t.UserId, t.LoginProvider, t.Name });
 
@@ -114,7 +124,7 @@ public partial class Db
 
             if (encryptPersonalData)
             {
-                var tokenProps = typeof(IdentityUserToken<Guid>).GetProperties().Where(
+                var tokenProps = typeof(UserToken).GetProperties().Where(
                                 prop => Attribute.IsDefined(prop, typeof(ProtectedPersonalDataAttribute)));
                 foreach (var p in tokenProps)
                 {
@@ -130,19 +140,21 @@ public partial class Db
             b.ToTable("user_tokens");
         });
 
-        builder.Entity<IdentityUserPasskey<Guid>>(b =>
+        Console.WriteLine("OnModelCreating6");
+
+        builder.Entity<UserPasskey>(b =>
         {
             b.HasKey(p => p.CredentialId);
             b.ToTable("user_passkeys");
             b.Property(p => p.CredentialId).HasMaxLength(1024); // Defined in WebAuthn spec to be no longer than 1023 bytes
-            b.OwnsOne(p => p.Data).ToJson();
+            b.OwnsOne(p => p.Data, nb => nb.ToJson());
         });
 
+        Console.WriteLine("OnModelCreating7");
+
         // Currently no differences between Version 3 and Version 2
-        builder.Entity<User>(b =>
-        {
-            b.HasMany<IdentityUserRole<Guid>>().WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
-        });
+
+        Console.WriteLine("OnModelCreating5");
 
         builder.Entity<Role>(b =>
         {
@@ -154,37 +166,54 @@ public partial class Db
             b.Property(u => u.UpcaseName).HasMaxLength(256);
             b.Property(u => u.Name).HasMaxLength(256);
 
-            b.HasMany<IdentityUserRole<Guid>>().WithOne().HasForeignKey(ur => ur.RoleId).IsRequired();
-            b.HasMany<IdentityRoleClaim<Guid>>().WithOne().HasForeignKey(rc => rc.RoleId).IsRequired();
-            b.HasMany<UserApiKeyRole>().WithOne(kr => kr.Role).HasForeignKey(kr => kr.RoleId).IsRequired();
+            b.HasMany<UserRole>(r => r.UserRoles).WithOne(ur => ur.Role).HasForeignKey(ur => ur.RoleId).IsRequired();
+            b.HasMany<RoleClaim>().WithOne().HasForeignKey(rc => rc.RoleId).IsRequired();
         });
 
-        builder.Entity<IdentityRoleClaim<Guid>>(b =>
+        Console.WriteLine("OnModelCreating6");
+
+        builder.Entity<RoleClaim>(b =>
         {
             b.HasKey(rc => rc.Id);
             b.ToTable("role_claims");
         });
 
+        Console.WriteLine("OnModelCreating7");
         builder.Entity<Group>(b =>
         {
+            Console.WriteLine("Configuring Group entity");
             b.HasKey(g => g.Id);
             b.Property(o => o.Name).HasMaxLength(128);
             b.Property(o => o.UpcaseName).HasMaxLength(128);
             b.HasIndex(g => g.UpcaseName).HasDatabaseName("ix_groups_upcase_name").IsUnique();
             b.ToTable("groups");
             b.Property(g => g.ConcurrencyStamp).IsConcurrencyToken();
+
+            Console.WriteLine("Setting up relationships for Group entity");
             b.HasMany(o => o.Roles)
                 .WithMany(r => r.Groups)
-                .UsingEntity(j => j.ToTable("groups_roles"));
+                .UsingEntity("groups_roles");
 
+            Console.WriteLine("Setting up Claims relationship for Group entity");
             b.HasMany(o => o.Claims)
-                .WithOne(o => o.Group);
+                .WithOne(o => o.Group)
+                .HasForeignKey(o => o.GroupId)
+                .IsRequired();
 
+            Console.WriteLine("Setting up Users relationship for Group entity");
             b.HasMany(o => o.Users)
                 .WithMany(u => u.Groups)
-                .UsingEntity(j => j.ToTable("groups_users"));
+                .UsingEntity("groups_users");
+
+            Console.WriteLine("Setting up Admins relationship for Group entity");
+            b.HasMany(o => o.Admins)
+                .WithMany(o => o.Groups)
+                .UsingEntity("groups_admins");
+
+            Console.WriteLine("Finished configuring Group entity");
         });
 
+        Console.WriteLine("OnModelCreating8");
         builder.Entity<GroupClaim>(b =>
         {
             b.HasKey(o => o.Id);
@@ -194,11 +223,14 @@ public partial class Db
             b.HasOne(o => o.Group).WithMany(g => g.Claims).HasForeignKey(o => o.GroupId).IsRequired();
         });
 
-        builder.Entity<IdentityUserRole<Guid>>(b =>
+        Console.WriteLine("OnModelCreating9");
+        builder.Entity<UserRole>(b =>
         {
             b.HasKey(r => new { r.UserId, r.RoleId });
             b.ToTable("user_roles");
         });
+
+        Console.WriteLine("OnModelCreatin10");
 
         builder.Entity<UserApiKey>(b =>
         {
@@ -208,7 +240,15 @@ public partial class Db
             b.Property(k => k.KeyDigest).HasMaxLength(512);
             b.Property(k => k.CreatedAt).IsRequired();
             b.HasIndex(k => new { k.UserId, k.Name }).IsUnique();
-            b.HasMany<UserApiKeyRole>(k => k.UserApiKeyRoles).WithOne(kr => kr.UserApiKey).IsRequired();
+            b.HasMany(k => k.UserApiKeyRoles).WithOne(r => r.UserApiKey).HasForeignKey(r => r.UserApiKeyId).IsRequired();
         });
+
+        builder.Entity<UserApiKeyRole>(b =>
+        {
+            b.HasKey(r => new { r.UserApiKeyId, r.RoleId });
+            b.ToTable("user_api_keys_roles");
+        });
+
+        Console.WriteLine("OnModelCreating complete");
     }
 }

@@ -19,15 +19,21 @@ public class User : IdentityUser<Guid>
 
     public DateTime? LastLoginAt { get; set; }
 
-    public virtual IdentityUserPasswordAuth<Guid>? PasswordAuth { get; set; }
+    public virtual UserPasswordAuth? PasswordAuth { get; set; }
+
+    public virtual HashSet<UserToken> Tokens { get; set; } = new();
+
+    public virtual HashSet<UserClaim> Claims { get; set; } = new();
 
     public virtual HashSet<UserApiKey> ApiKeys { get; set; } = new();
 
-    public virtual HashSet<IdentityUserRole<Guid>> UserRoles { get; set; } = new();
+    public virtual HashSet<UserRole> UserRoles { get; set; } = new();
 
+    public virtual HashSet<UserLoginProvider> LoginProviders { get; set; } = new();
+
+    public virtual HashSet<UserPasskey> Passkeys { get; set; } = new();
 
     public virtual HashSet<Group> Groups { get; set; } = new();
-
 
     public override int GetHashCode()
     {

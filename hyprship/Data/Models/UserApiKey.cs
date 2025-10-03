@@ -35,22 +35,21 @@ public class UserApiKey : IdentityUserApiKey<Guid>
     public virtual HashSet<UserApiKeyRole> UserApiKeyRoles
     {
         get => this.userApiKeyRoles;
-        set 
-            {
-                this.userApiKeyRoles = value;
-                this.Roles = new Many<UserApiKey, Role, UserApiKeyRole>(
-                    this,
-                    this.UserApiKeyRoles,
-                    (o) => o.Role,
-                    (key, role) => new(key.Id, role.Id)
-                    {
-                        Role = role,
-                        UserApiKey = this,
-                    });
+        set
+        {
+            this.userApiKeyRoles = value;
+            this.Roles = new Many<UserApiKey, Role, UserApiKeyRole>(
+                this,
+                this.UserApiKeyRoles,
+                (o) => o.Role,
+                (key, role) => new(key.Id, role.Id)
+                {
+                    Role = role,
+                    UserApiKey = this,
+                });
         }
     }
 
     [NotMapped]
     public Many<UserApiKey, Role, UserApiKeyRole> Roles { get; private set; }
 }
-

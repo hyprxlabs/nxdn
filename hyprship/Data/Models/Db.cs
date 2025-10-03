@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Hyprship.Data.Models;
 
-public partial class Db : IdentityDbContext<User, Role, Guid>
+public partial class Db : IdentityDbContext<User, Role, Guid, UserClaim, UserPasswordAuth, UserRole, UserLoginProvider, RoleClaim, UserToken, UserPasskey>
 {
     public Db(DbContextOptions options)
         : base(options)
@@ -27,6 +27,7 @@ public partial class Db : IdentityDbContext<User, Role, Guid>
         optionsBuilder.UseSnakeCaseNamingConvention();
         optionsBuilder.UseAsyncSeeding(async (ctx, _, ct) =>
         {
+            Console.WriteLine("Running async seed...");
             var adminRole = await ctx.Set<Role>().FirstOrDefaultAsync(r => r.Name == "admin", ct);
             if (adminRole is null)
             {

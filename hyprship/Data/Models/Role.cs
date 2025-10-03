@@ -26,5 +26,5 @@ public class Role : IdentityRole<Guid>
 
     public HashSet<RoleClaim> Claims { get; set; } = new();
 
-    public HashSet<IdentityUserRole<Guid>> UserRoles { get; set; } = new();
+    public HashSet<UserRole> UserRoles { get; set; } = new();
 }

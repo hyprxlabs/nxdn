@@ -19,7 +19,7 @@ public static class Auth
 {
     public static void MapAuthEndpoints(this WebApplication app)
     {
-        app.MapGet("auth/user/login",  Login);
+        app.MapGet("auth/user/login", Login);
     }
 
     public static async Task<IResult> Login(
@@ -48,7 +48,7 @@ public static class Auth
 
         var useCookieScheme = (useCookies == true) || (useSessionCookies == true);
         var isPersistent = (useCookies == true) && (useSessionCookies != true);
-        signInManager.AuthenticationScheme = useCookieScheme ? IdentityConstants.ApplicationScheme : IdentityConstants.BearerScheme; 
+        signInManager.AuthenticationScheme = useCookieScheme ? IdentityConstants.ApplicationScheme : IdentityConstants.BearerScheme;
 
         var result = await signInManager.PasswordSignInAsync(req.Email, req.Password, isPersistent, lockoutOnFailure: true);
 
@@ -93,7 +93,6 @@ public static class Auth
         return TypedResults.Ok();
     }
 }
-
 
 public class LoginRequest
 {

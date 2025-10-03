@@ -27,9 +27,11 @@ public class UserPasswordAuth : IdentityUserPasswordAuth<Guid>
         this.CreatedAt = DateTime.UtcNow;
     }
 
-    public DateTime? ExpiresAt { get; set; }
+    public virtual DateTime? ExpiresAt { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+    public virtual DateTime CreatedAt { get; set; }
 
-    public DateTime? UpdatedAt { get; set; }
+    public virtual DateTime? UpdatedAt { get; set; }
+
+    public virtual User User { get; set; } = null!;
 }

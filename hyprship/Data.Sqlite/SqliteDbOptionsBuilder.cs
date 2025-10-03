@@ -42,7 +42,7 @@ public class SqliteDbOptionsBuilder : DbContextOptionsBuilder<Db>
 
             int commandTimeout = 60;
             var ct = Environment.GetEnvironmentVariable("HYPRSHIP_MYSQL_COMMAND_TIMEOUT");
-            if (int.TryParse(ct, out var parsed) && parsed > 0)
+            if (ct is not null && int.TryParse(ct, out var parsed) && parsed > 0)
                 commandTimeout = parsed;
 
             opt.CommandTimeout(commandTimeout);
@@ -50,5 +50,6 @@ public class SqliteDbOptionsBuilder : DbContextOptionsBuilder<Db>
 
         optionsBuilder.UseSnakeCaseNamingConvention();
         optionsBuilder.UseSqlite(connectionString, configure);
+        Console.WriteLine("Using SQLite with connection string: " + connectionString);
     }
 }

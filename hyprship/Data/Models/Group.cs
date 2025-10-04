@@ -6,7 +6,6 @@ public class Group
 {
     public Group()
     {
-        this.ConcurrencyStamp = Uuid7.Stamp();
     }
 
     public Group(string name)
@@ -30,4 +29,9 @@ public class Group
     public virtual HashSet<User> Admins { get; set; } = new();
 
     public virtual HashSet<GroupClaim> Claims { get; set; } = new();
+
+    public override string ToString()
+    {
+        return this.Name;
+    }
 }

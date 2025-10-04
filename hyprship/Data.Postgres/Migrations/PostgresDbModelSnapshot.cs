@@ -32,7 +32,8 @@ namespace Hyprship.Data.Postgres.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
                         .HasColumnName("concurrency_stamp");
 
                     b.Property<string>("Name")
@@ -43,8 +44,8 @@ namespace Hyprship.Data.Postgres.Migrations
 
                     b.Property<string>("UpcaseName")
                         .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)")
+                        .HasMaxLength(38)
+                        .HasColumnType("character varying(38)")
                         .HasColumnName("upcase_name");
 
                     b.HasKey("Id")
@@ -59,19 +60,19 @@ namespace Hyprship.Data.Postgres.Migrations
 
             modelBuilder.Entity("Hyprship.Data.Models.GroupClaim", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("integer")
                         .HasColumnName("id");
 
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
                     b.Property<string>("ClaimType")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
                         .HasColumnName("claim_type");
 
                     b.Property<string>("ClaimValue")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("claim_value");
 
@@ -97,7 +98,8 @@ namespace Hyprship.Data.Postgres.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("text")
+                        .HasMaxLength(38)
+                        .HasColumnType("character varying(38)")
                         .HasColumnName("concurrency_stamp");
 
                     b.Property<string>("Name")
@@ -120,6 +122,45 @@ namespace Hyprship.Data.Postgres.Migrations
                     b.ToTable("roles", (string)null);
                 });
 
+            modelBuilder.Entity("Hyprship.Data.Models.RoleClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("claim_type");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("text")
+                        .HasColumnName("claim_value");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("role_id");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("pk_role_claims");
+
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_role_claims_role_id");
+
+                    b.ToTable("role_claims", (string)null);
+                });
+
             modelBuilder.Entity("Hyprship.Data.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -129,7 +170,8 @@ namespace Hyprship.Data.Postgres.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("text")
+                        .HasMaxLength(38)
+                        .HasColumnType("character varying(38)")
                         .HasColumnName("concurrency_stamp");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -149,12 +191,9 @@ namespace Hyprship.Data.Postgres.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("last_login_at");
 
-                    b.Property<Guid?>("RoleId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("role_id");
-
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("text")
+                        .HasMaxLength(38)
+                        .HasColumnType("character varying(38)")
                         .HasColumnName("security_stamp");
 
                     b.Property<string>("UpcaseEmail")
@@ -183,9 +222,6 @@ namespace Hyprship.Data.Postgres.Migrations
                         .IsUnique()
                         .HasDatabaseName("ix_users_upcase_email");
 
-                    b.HasIndex("RoleId")
-                        .HasDatabaseName("ix_users_role_id");
-
                     b.HasIndex("UserName")
                         .IsUnique()
                         .HasDatabaseName("ix_users_upcase_user_name");
@@ -210,14 +246,14 @@ namespace Hyprship.Data.Postgres.Migrations
 
                     b.Property<string>("KeyDigest")
                         .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("character varying(512)")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)")
                         .HasColumnName("key_digest");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
                         .HasColumnName("name");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -238,25 +274,6 @@ namespace Hyprship.Data.Postgres.Migrations
                     b.ToTable("user_api_keys", (string)null);
                 });
 
-            modelBuilder.Entity("Hyprship.Data.Models.UserApiKeyRole", b =>
-                {
-                    b.Property<Guid>("UserApiKeyId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_api_key_id");
-
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("role_id");
-
-                    b.HasKey("UserApiKeyId", "RoleId")
-                        .HasName("pk_user_api_keys_roles");
-
-                    b.HasIndex("RoleId")
-                        .HasDatabaseName("ix_user_api_keys_roles_role_id");
-
-                    b.ToTable("user_api_keys_roles", (string)null);
-                });
-
             modelBuilder.Entity("Hyprship.Data.Models.UserClaim", b =>
                 {
                     b.Property<int>("Id")
@@ -267,7 +284,8 @@ namespace Hyprship.Data.Postgres.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("text")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
                         .HasColumnName("claim_type");
 
                     b.Property<string>("ClaimValue")
@@ -324,12 +342,39 @@ namespace Hyprship.Data.Postgres.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("LoginProvider", "ProviderKey")
-                        .HasName("pk_user_login_providers");
+                        .HasName("pk_user_login_provider");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_user_login_providers_user_id");
+                        .HasDatabaseName("ix_user_login_provider_user_id");
 
-                    b.ToTable("user_login_providers", (string)null);
+                    b.ToTable("user_login_provider", (string)null);
+                });
+
+            modelBuilder.Entity("Hyprship.Data.Models.UserLoginProviderToken", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("login_provider");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("Value")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)")
+                        .HasColumnName("value");
+
+                    b.HasKey("UserId", "LoginProvider", "Name")
+                        .HasName("pk_user_login_provider_tokens");
+
+                    b.ToTable("user_login_provider_tokens", (string)null);
                 });
 
             modelBuilder.Entity("Hyprship.Data.Models.UserPasskey", b =>
@@ -426,104 +471,6 @@ namespace Hyprship.Data.Postgres.Migrations
                     b.ToTable("user_password_auth", (string)null);
                 });
 
-            modelBuilder.Entity("Hyprship.Data.Models.UserRole", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("role_id");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at");
-
-                    b.HasKey("UserId", "RoleId")
-                        .HasName("pk_user_roles");
-
-                    b.HasIndex("RoleId")
-                        .HasDatabaseName("ix_user_roles_role_id");
-
-                    b.ToTable("user_roles", (string)null);
-                });
-
-            modelBuilder.Entity("Hyprship.Data.Models.UserToken", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)")
-                        .HasColumnName("login_provider");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)")
-                        .HasColumnName("name");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("text")
-                        .HasColumnName("value");
-
-                    b.HasKey("UserId", "LoginProvider", "Name")
-                        .HasName("pk_user_tokens");
-
-                    b.ToTable("user_tokens", (string)null);
-                });
-
-            modelBuilder.Entity("Hyprx.AspNetCore.Identity.RoleClaim", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("text")
-                        .HasColumnName("claim_type");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("text")
-                        .HasColumnName("claim_value");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("role_id");
-
-                    b.Property<Guid?>("RoleId1")
-                        .HasColumnType("uuid")
-                        .HasColumnName("role_id1");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at");
-
-                    b.HasKey("Id")
-                        .HasName("pk_role_claims");
-
-                    b.HasIndex("RoleId")
-                        .HasDatabaseName("ix_role_claims_role_id");
-
-                    b.HasIndex("RoleId1")
-                        .HasDatabaseName("ix_role_claims_role_id1");
-
-                    b.ToTable("role_claims", (string)null);
-                });
-
             modelBuilder.Entity("groups_admins", b =>
                 {
                     b.Property<Guid>("AdminsId")
@@ -562,6 +509,44 @@ namespace Hyprship.Data.Postgres.Migrations
                     b.ToTable("groups_roles", (string)null);
                 });
 
+            modelBuilder.Entity("user_api_keys_roles", b =>
+                {
+                    b.Property<Guid>("RolesId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("roles_id");
+
+                    b.Property<Guid>("UserApiKeysId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_api_keys_id");
+
+                    b.HasKey("RolesId", "UserApiKeysId")
+                        .HasName("pk_user_api_keys_roles");
+
+                    b.HasIndex("UserApiKeysId")
+                        .HasDatabaseName("ix_user_api_keys_roles_user_api_keys_id");
+
+                    b.ToTable("user_api_keys_roles", (string)null);
+                });
+
+            modelBuilder.Entity("users_roles", b =>
+                {
+                    b.Property<Guid>("RolesId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("roles_id");
+
+                    b.Property<Guid>("UsersId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("users_id");
+
+                    b.HasKey("RolesId", "UsersId")
+                        .HasName("pk_users_roles");
+
+                    b.HasIndex("UsersId")
+                        .HasDatabaseName("ix_users_roles_users_id");
+
+                    b.ToTable("users_roles", (string)null);
+                });
+
             modelBuilder.Entity("Hyprship.Data.Models.GroupClaim", b =>
                 {
                     b.HasOne("Hyprship.Data.Models.Group", "Group")
@@ -569,17 +554,21 @@ namespace Hyprship.Data.Postgres.Migrations
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_group_claims_groups_group_id");
+                        .HasConstraintName("fk_group_claims_group_group_id");
 
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("Hyprship.Data.Models.User", b =>
+            modelBuilder.Entity("Hyprship.Data.Models.RoleClaim", b =>
                 {
-                    b.HasOne("Hyprship.Data.Models.Role", null)
-                        .WithMany("Users")
+                    b.HasOne("Hyprship.Data.Models.Role", "Role")
+                        .WithMany("Claims")
                         .HasForeignKey("RoleId")
-                        .HasConstraintName("fk_users_roles_role_id");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_role_claims_role_role_id");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("Hyprship.Data.Models.UserApiKey", b =>
@@ -592,27 +581,6 @@ namespace Hyprship.Data.Postgres.Migrations
                         .HasConstraintName("fk_user_api_keys_users_user_id");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Hyprship.Data.Models.UserApiKeyRole", b =>
-                {
-                    b.HasOne("Hyprship.Data.Models.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_user_api_keys_roles_roles_role_id");
-
-                    b.HasOne("Hyprship.Data.Models.UserApiKey", "UserApiKey")
-                        .WithMany("UserApiKeyRoles")
-                        .HasForeignKey("UserApiKeyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_user_api_keys_roles_user_api_keys_user_api_key_id");
-
-                    b.Navigation("Role");
-
-                    b.Navigation("UserApiKey");
                 });
 
             modelBuilder.Entity("Hyprship.Data.Models.UserClaim", b =>
@@ -634,7 +602,19 @@ namespace Hyprship.Data.Postgres.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_user_login_providers_users_user_id");
+                        .HasConstraintName("fk_user_login_provider_users_user_id");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Hyprship.Data.Models.UserLoginProviderToken", b =>
+                {
+                    b.HasOne("Hyprship.Data.Models.User", "User")
+                        .WithMany("LoginProviderTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_login_provider_tokens_users_user_id");
 
                     b.Navigation("User");
                 });
@@ -704,54 +684,6 @@ namespace Hyprship.Data.Postgres.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Hyprship.Data.Models.UserRole", b =>
-                {
-                    b.HasOne("Hyprship.Data.Models.Role", "Role")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_user_roles_roles_role_id");
-
-                    b.HasOne("Hyprship.Data.Models.User", "User")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_user_roles_users_user_id");
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Hyprship.Data.Models.UserToken", b =>
-                {
-                    b.HasOne("Hyprship.Data.Models.User", "User")
-                        .WithMany("Tokens")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_user_tokens_users_user_id");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Hyprx.AspNetCore.Identity.RoleClaim", b =>
-                {
-                    b.HasOne("Hyprship.Data.Models.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_role_claims_roles_role_id");
-
-                    b.HasOne("Hyprship.Data.Models.Role", null)
-                        .WithMany("Claims")
-                        .HasForeignKey("RoleId1")
-                        .HasConstraintName("fk_role_claims_roles_role_id1");
-                });
-
             modelBuilder.Entity("groups_admins", b =>
                 {
                     b.HasOne("Hyprship.Data.Models.User", null)
@@ -786,6 +718,40 @@ namespace Hyprship.Data.Postgres.Migrations
                         .HasConstraintName("fk_groups_roles_roles_roles_id");
                 });
 
+            modelBuilder.Entity("user_api_keys_roles", b =>
+                {
+                    b.HasOne("Hyprship.Data.Models.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RolesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_api_keys_roles_roles_roles_id");
+
+                    b.HasOne("Hyprship.Data.Models.UserApiKey", null)
+                        .WithMany()
+                        .HasForeignKey("UserApiKeysId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_api_keys_roles_user_api_keys_user_api_keys_id");
+                });
+
+            modelBuilder.Entity("users_roles", b =>
+                {
+                    b.HasOne("Hyprship.Data.Models.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RolesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_users_roles_role_roles_id");
+
+                    b.HasOne("Hyprship.Data.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_users_roles_users_users_id");
+                });
+
             modelBuilder.Entity("Hyprship.Data.Models.Group", b =>
                 {
                     b.Navigation("Claims");
@@ -794,10 +760,6 @@ namespace Hyprship.Data.Postgres.Migrations
             modelBuilder.Entity("Hyprship.Data.Models.Role", b =>
                 {
                     b.Navigation("Claims");
-
-                    b.Navigation("UserRoles");
-
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Hyprship.Data.Models.User", b =>
@@ -806,20 +768,13 @@ namespace Hyprship.Data.Postgres.Migrations
 
                     b.Navigation("Claims");
 
+                    b.Navigation("LoginProviderTokens");
+
                     b.Navigation("LoginProviders");
 
                     b.Navigation("Passkeys");
 
                     b.Navigation("PasswordAuth");
-
-                    b.Navigation("Tokens");
-
-                    b.Navigation("UserRoles");
-                });
-
-            modelBuilder.Entity("Hyprship.Data.Models.UserApiKey", b =>
-                {
-                    b.Navigation("UserApiKeyRoles");
                 });
 #pragma warning restore 612, 618
         }

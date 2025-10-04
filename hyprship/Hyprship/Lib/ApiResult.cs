@@ -60,7 +60,7 @@ public class ApiResult<TValue> : ApiResult
 public class ApiResult<T, TValue> : ApiResult<TValue>
     where T : ApiResult<T, TValue>, new()
 {
-    public TValue? Value { get; set; }
+    public new TValue? Value { get; set; }
 
     public new Ok<T> Ok(TValue value)
     {
@@ -194,6 +194,33 @@ public sealed class Failure<TValue> : IResult, IEndpointMetadataProvider, IStatu
 }
 */
 
+public class ValidationError : Error
+{
+    public ValidationError()
+        : base()
+    {
+        this.Code = "validation-error";
+    }
+
+    public ValidationError(string message)
+        : base(message)
+    {
+        this.Code = "validation-error";
+    }
+
+    public ValidationError(string message, OrderedDictionary<string, string[]> details)
+        : base(message, "validation-error")
+    {
+    }
+
+    public ValidationError(string message, IEnumerable<Error> errors)
+        : base(message, "validation-error", errors)
+    {
+    }
+
+    public OrderedDictionary<string, string[]> Details { get; set; } = new();
+}
+
 public class Error
 {
     public Error()
@@ -210,14 +237,6 @@ public class Error
     }
 
     public Error(string message, string code)
-    {
-        this.Message = message;
-        this.Code = code;
-        this.ParentId = Activity.Current?.ParentId;
-        this.TraceId = Activity.Current?.TraceId.ToString();
-    }
-
-    public Error(string message, string code, OrderedDictionary<string, object> details)
     {
         this.Message = message;
         this.Code = code;
@@ -245,8 +264,6 @@ public class Error
     public string Message { get; set; } = string.Empty;
 
     public string Code { get; set; } = "Error";
-
-    public OrderedDictionary<string, object?> Details { get; set; } = new();
 
     public List<Error> Errors { get; set; } = new();
 

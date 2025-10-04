@@ -107,6 +107,7 @@ public static class IdentityEntityFrameworkBuilderExtensions
 
     private static Type? FindGenericBaseType(Type currentType, Type genericBaseType)
     {
+        Console.WriteLine("FindGenericBaseType");
         Type? type = currentType;
         while (type != null)
         {

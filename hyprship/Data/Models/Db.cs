@@ -4,79 +4,63 @@ using Hyprx.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Hyprship.Data.Models;
 
-public partial class Db : IdentityDbContext<User, Role, Guid, UserClaim, UserPasswordAuth, UserRole, UserLoginProvider, RoleClaim, UserToken, UserPasskey>
+public partial class Db : DbContext
 {
     public Db(DbContextOptions options)
         : base(options)
     {
+        Console.WriteLine("Db constructor called");
     }
 
-    public DbSet<UserApiKey> UserApiKeys { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = default!;
 
-    public DbSet<UserApiKeyRole> UserApiKeyRoles { get; set; } = null!;
+    public DbSet<UserPasswordAuth> UserPasswordAuths { get; set; } = default!;
 
-    public DbSet<Group> Groups { get; set; } = null!;
+    public DbSet<UserClaim> UserClaims { get; set; } = default!;
 
-    public DbSet<GroupClaim> GroupClaims { get; set; } = null!;
+    public DbSet<UserLoginProvider> UserLoginProviders { get; set; } = default!;
 
+    public DbSet<UserLoginProviderToken> UserLoginProviderTokens { get; set; } = default!;
+
+    public DbSet<UserPasskey> UserPasskeys { get; set; } = default!;
+
+    public DbSet<UserApiKey> UserApiKeys { get; set; } = default!;
+
+    public DbSet<Role> Roles { get; set; } = default!;
+
+    public DbSet<RoleClaim> RoleClaims { get; set; } = default!;
+
+    public DbSet<Group> Groups { get; set; } = default!;
+
+    public DbSet<GroupClaim> GroupClaims { get; set; } = default!;
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        Console.WriteLine("OnConfiguring");
+        if (optionsBuilder.IsConfigured)
+            return;
+
+        Console.WriteLine("OnConfiguring invoking...");
         optionsBuilder.UseSnakeCaseNamingConvention();
-        optionsBuilder.UseAsyncSeeding(async (ctx, _, ct) =>
+    }
+
+    protected StoreOptions? GetStoreOptions() => this.GetService<IDbContextOptions>()
+        .Extensions.OfType<CoreOptionsExtension>()
+        .FirstOrDefault()?.ApplicationServiceProvider
+        ?.GetService<IOptions<IdentityOptions>>()
+        ?.Value?.Stores;
+
+    protected sealed class PersonalDataConverter : ValueConverter<string, string>
+    {
+        public PersonalDataConverter(IPersonalDataProtector protector)
+            : base(s => protector.Protect(s), s => protector.Unprotect(s), default)
         {
-            Console.WriteLine("Running async seed...");
-            var adminRole = await ctx.Set<Role>().FirstOrDefaultAsync(r => r.Name == "admin", ct);
-            if (adminRole is null)
-            {
-                adminRole = new Role
-                {
-                    Id = Guid.CreateVersion7(),
-                    Name = "admin",
-                    UpcaseName = "Admin",
-                    ConcurrencyStamp = Guid.NewGuid().ToString("N"),
-                };
-                ctx.Set<Role>().Add(adminRole);
-            }
-
-            var email = Environment.GetEnvironmentVariable("HS_ADMIN_EMAIL") ?? "hsadmin@localhost";
-            var username = Environment.GetEnvironmentVariable("HS_ADMIN_USERNAME") ?? "hsadmin";
-            var password = Environment.GetEnvironmentVariable("HS_ADMIN_PASSWORD") ?? "ChangeM3!";
-            var rootServiceAccount =
-                await ctx.Set<User>().FirstOrDefaultAsync(u => u.Email == email.ToUpperInvariant(), ct);
-            if (rootServiceAccount is null)
-            {
-                var rootEmail = Environment.GetEnvironmentVariable("HS_ADMIN_EMAIL");
-                if (string.IsNullOrWhiteSpace(rootEmail))
-                    rootEmail = "hsadmin@localhost";
-
-                rootServiceAccount = new User
-                {
-                    Id = Guid.CreateVersion7(),
-                    UserName = username,
-                    UpcaseUserName = username.ToUpperInvariant(),
-                    Email = rootEmail,
-                    UpcaseEmail = rootEmail.ToUpperInvariant(),
-                    SecurityStamp = Guid.NewGuid().ToString("N"),
-                    ConcurrencyStamp = Guid.NewGuid().ToString("N"),
-                };
-
-                ctx.Set<User>().Add(rootServiceAccount);
-
-                var pw = Environment.GetEnvironmentVariable("HYPRSHIP_ROOT_PASSWORD") ?? "ChangeM3!";
-                var login = new UserPasswordAuth()
-                {
-                    IsTwoFactorEnabled = false,
-                    IsEmailVerified = true,
-                    PasswordDigest = new PasswordHasher().HashPassword(pw),
-                    UserId = rootServiceAccount.Id,
-                    ConcurrencyStamp = Guid.NewGuid().ToString("N"),
-                };
-            }
-        });
-
-        base.OnConfiguring(optionsBuilder);
+        }
     }
 }

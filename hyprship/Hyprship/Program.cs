@@ -1,22 +1,44 @@
 using Hyprship;
-using Hyprship.Auth;
 using Hyprship.Data.Models;
-using Hyprship.Lib;
+using Hyprship.Database.Models;
 
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+try
 {
-    Args = args,
-    ContentRootPath = "public",
-});
+    var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+    {
+        Args = args,
+        ContentRootPath = "public",
+    });
 
-builder.AddHyprship();
+    builder.AddHyprship();
 
-var app = builder.Build();
+    var app = builder.Build();
 
-app.UseHyprship();
+    app.UseHyprship();
 
-app.Run();
+
+    var config = app.Services.GetService<IConfigurationRoot>();
+    Console.WriteLine(config is null ? "config is null" : "config is not null");
+    var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetService<Db>();
+    if (db is null)
+    {
+        Console.WriteLine("db is null");
+    }
+
+    db.Database.EnsureCreated();
+    var seeder = ActivatorUtilities.CreateInstance<DbSeeder>(scope.ServiceProvider);
+    await seeder.SeedAsync(db);
+
+    app.Run();
+    Console.WriteLine("application complete");
+    Environment.Exit(0);
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex.Message);
+    Console.WriteLine(ex.StackTrace);
+    Environment.Exit(1);
+}

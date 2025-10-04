@@ -107,7 +107,8 @@ public class IdentityUserContext<TUser, TKey, TUserClaim, TUserPasswordAuth, TUs
 /// <typeparam name="TUserLogin">The type of the user login object.</typeparam>
 /// <typeparam name="TUserToken">The type of the user token object.</typeparam>
 /// <typeparam name="TUserPasskey">The type of the user passkey object.</typeparam>
-public abstract class IdentityUserContext<TUser, TKey, TUserClaim, TUserPasswordAuth, TUserLogin, TUserToken, TUserPasskey> : DbContext
+public abstract class IdentityUserContext<TUser, TKey, TUserClaim, TUserPasswordAuth, TUserLogin, TUserToken,
+    TUserPasskey> : DbContext
     where TUser : IdentityUser<TKey>
     where TKey : IEquatable<TKey>
     where TUserClaim : IdentityUserClaim<TKey>
@@ -156,6 +157,8 @@ public abstract class IdentityUserContext<TUser, TKey, TUserClaim, TUserPassword
     /// Gets or sets the <see cref="DbSet{TEntity}"/> of User passkeys.
     /// </summary>
     public virtual DbSet<TUserPasskey> UserPasskeys { get; set; } = default!;
+
+    public virtual DbSet<TUserPasswordAuth> UserPasswordAuths { get; set; } = default!;
 
     /// <summary>
     /// Gets the schema version used for versioning.

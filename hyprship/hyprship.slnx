@@ -1,12 +1,13 @@
 <Solution>
   <Project Path="../web/AspNetCore.Identity.EntityFrameworkCore/Hyprx.AspNetCore.Identity.EntityFrameworkCore.csproj" />
   <Project Path="../web/Extensions.Identity.Core/Hyprx.Extensions.Identity.Core.csproj" />
+  <Project Path="..\bcl\Core\src\Hyprx.Core.csproj" Type="Classic C#" />
+  <Project Path="..\bcl\DotEnv\src\Hyprx.DotEnv.csproj" Type="Classic C#" />
+  <Project Path="..\bcl\Secrets\src\Hyprx.Secrets.csproj" Type="Classic C#" />
   <Project Path="AppHost/Hyprship.AppHost.csproj" />
   <Project Path="Data.Mssql\Hyprship.Data.Mssql.csproj" />
-  <Project Path="Data.Mysql\Hyprship.Data.Mysql.csproj" />
   <Project Path="Data.Postgres\Hyprship.Data.Postgres.csproj" />
   <Project Path="Data.Sqlite/Hyprship.Data.Sqlite.csproj" />
-  <Project Path="Data.Stores/Hyprship.Data.Stores.csproj" />
   <Project Path="Data\Hyprship.Data.Models.csproj" />
   <Project Path="Hyprship/Hyprship.csproj" />
   <Project Path="ServiceDefaults/Hyprship.ServiceDefaults.csproj" />

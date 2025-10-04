@@ -1,13 +1,13 @@
 using System.Security.Claims;
 
 using Hyprship.Data.Models;
-using Hyprship.Data.Stores;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
 namespace Hypership.Services.Identity;
 
+/*
 public class HyprshipClaimsFactory : Microsoft.AspNetCore.Identity.UserClaimsPrincipalFactory<User, Role>
 {
     public HyprshipClaimsFactory(UserManager<User> userManager, RoleManager<Role> roleManager, GroupStore groupStore, IOptions<IdentityOptions> optionsAccessor)
@@ -20,3 +20,4 @@ public class HyprshipClaimsFactory : Microsoft.AspNetCore.Identity.UserClaimsPri
         return base.GenerateClaimsAsync(user);
     }
 }
+*/

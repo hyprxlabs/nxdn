@@ -1,10 +1,15 @@
-using Hyprship.Auth;
+using Hypership.Services.Identity;
+
 using Hyprship.Data.Models;
+using Hyprship.Data.Sqlite;
 using Hyprship.Lib;
+using Hyprship.Routes;
 
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design.Internal;
 
 namespace Hyprship;
 
@@ -21,50 +26,68 @@ public static class Startup
         if (string.IsNullOrWhiteSpace(dbProvider))
             dbProvider = "sqlite";
 
-        builder.Services.AddOpenApi();
-        builder.Services.AddAuthentication();
-        builder.Services.AddDbContext<Db>(o =>
+        // builder.Services.AddOpenApi();
+        // builder.Services.AddEntityFrameworkNamingConventions();
+        builder.Services.AddSingleton<IPasswordHasher<User>, Hypership.Services.Identity.PasswordHasher<User>>();
+        // builder.Services.AddSingleton<IEmailSender<User>, EmailSender>();
+        
+        switch (dbProvider)
         {
-            o.UseSnakeCaseNamingConvention();
-            o.UseSqlite("Data Source=./data/hyprship.db");
-        });
+            default:
+                builder.Services.AddDbContext<Db, SqliteDb>(options =>
+                {
+                    options.UseSnakeCaseNamingConvention();
+                    options.UseSqlite("Data Source=hyprship.db");
+                    options.EnableDetailedErrors();
+                    options.EnableSensitiveDataLogging();
+                });
+                
+                break;
+        }
 
+
+        /*
         builder.Services.AddIdentity<User, Role>((o) =>
-        {
-            o.SignIn.RequireConfirmedEmail = true;
-            o.SignIn.RequireConfirmedPhoneNumber = false;
+            {
+                o.SignIn.RequireConfirmedEmail = true;
+                o.SignIn.RequireConfirmedPhoneNumber = false;
 
-            o.Lockout.AllowedForNewUsers = true;
-            o.Password.RequiredLength = 12;
-            o.Password.RequireNonAlphanumeric = true;
-            o.Password.RequireLowercase = true;
-            o.Password.RequireUppercase = true;
-            o.Password.RequireDigit = true;
-            o.User.RequireUniqueEmail = true;
-            o.Stores.MaxLengthForKeys = 128;
-        });
+                o.Lockout.AllowedForNewUsers = true;
+                o.Password.RequiredLength = 12;
+                o.Password.RequireNonAlphanumeric = true;
+                o.Password.RequireLowercase = true;
+                o.Password.RequireUppercase = true;
+                o.Password.RequireDigit = true;
+                o.User.RequireUniqueEmail = true;
+                o.Stores.MaxLengthForKeys = 128;
+            })
+            .AddHyprxEntityFrameworkStores<Db>()
+            .AddRoleManager<RoleManager>()
+            .AddUserManager<UserManager>()
+            .AddUserStore<UserStore>()
+            .AddRoleStore<RoleStore>();
+        */
     }
 
     public static void UseHyprship(this WebApplication app)
     {
-        app.UseHttpsRedirection();
+        // app.UseHttpsRedirection();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
-            app.MapOpenApi();
+            // app.MapOpenApi();
         }
 
-        app.MapStaticAssets();
+        // app.MapStaticAssets();
         app.MapGet("/hello", () =>
             {
                 return "hello";
             })
             .WithName("GetHello");
 
-        app.MapAuthEndpoints();
-
-        app.UseHealthChecks("/healthz");
+        // app.MapAuthEndpoints();
+        // app.UseHealthChecks("/healthz");
 
         app.UseExceptionHandler(ehApp =>
         {

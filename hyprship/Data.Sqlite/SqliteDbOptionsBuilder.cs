@@ -20,6 +20,7 @@ public class SqliteDbOptionsBuilder : DbContextOptionsBuilder<Db>
         string? connectionString = null,
         Action<SqliteDbContextOptionsBuilder2>? configure = null)
     {
+        Console.WriteLine("ApplyDefaults");
         if (optionsBuilder.IsConfigured)
             return;
 

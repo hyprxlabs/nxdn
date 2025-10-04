@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Hypership.Services.Identity;
 
-public class PasswordHander<TUser> : PasswordHasher, Microsoft.AspNetCore.Identity.IPasswordHasher<TUser>
+public class PasswordHasher<TUser> : PasswordHasher, Microsoft.AspNetCore.Identity.IPasswordHasher<TUser>
     where TUser : class
 {
     /// <summary>

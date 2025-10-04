@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hyprship.Data.Stores;
 
+/*
 public class GroupStore
 {
     public GroupStore(Db db)
@@ -46,4 +47,4 @@ public class GroupStore
 
         return await claims.Distinct().ToListAsync(token);
     }
-}
+*/

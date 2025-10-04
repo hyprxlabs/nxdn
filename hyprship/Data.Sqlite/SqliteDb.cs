@@ -15,6 +15,7 @@ public class SqliteDb : Db
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        Console.WriteLine("OnConfiguring");
         if (optionsBuilder.IsConfigured)
             return;
 
